@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "195345094314",
+    "project_id": "bysirvandad2",
+    "storage_bucket": "bysirvandad2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195345094314:android:769b05c3264e78b6d722d3",
+        "android_client_info": {
+          "package_name": "com.example.firebasenotesapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfDlDEibZqydcd-nGXz2Fv3HVxK2yfoJk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195345094314:android:e552c4d430c2ffcbd722d3",
+        "android_client_info": {
+          "package_name": "com.example.sirvandad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfDlDEibZqydcd-nGXz2Fv3HVxK2yfoJk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

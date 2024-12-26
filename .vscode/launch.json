@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "firebasenotesapp",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "firebasenotesapp (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "firebasenotesapp (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "firebasenotesapp (Dart Web)",
+            "program": "web",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
