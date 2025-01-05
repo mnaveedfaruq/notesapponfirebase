@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebasenotesapp/firebase_options.dart';
+import 'package:firebasenotesapp/views/everification.dart';
 import 'package:firebasenotesapp/views/homepage.dart';
+import 'package:firebasenotesapp/views/loginview.dart';
+import 'package:firebasenotesapp/views/registerview.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,6 +25,12 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const HomePage(),
+      routes: {
+        '/login/': (context) => const LoginView(),
+        '/register/': (context) => const RegisterView(),
+        '/home/': (context) => const HomePage(),
+        '/emailverfication/': (context) => const EmailVerrificationPage()
+      },
     );
   }
 }

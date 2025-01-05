@@ -18,11 +18,19 @@ class HomePage extends StatelessWidget {
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
+                //this code has been commented because
+                // email verification not worked
+                // final user = FirebaseAuth.instance.currentUser;
+                // if (user?.emailVerified ?? false) {
+                //   return const Text('done');
+                // } else {
+                //   return const EmailVerrificationPage();
+                // }
                 final user = FirebaseAuth.instance.currentUser;
                 if (user?.emailVerified ?? false) {
-                  debugPrint('user is not verified');
+                  debugPrint('email is not verified');
                 } else {
-                  debugPrint('user is verified');
+                  debugPrint('email is verified');
                 }
                 return const Text('done');
               default:

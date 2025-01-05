@@ -12,7 +12,12 @@
           "package_name": "com.example.firebasenotesapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "195345094314-jjtr83cp92isv7blrr5pjh8nt17ucuk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAfDlDEibZqydcd-nGXz2Fv3HVxK2yfoJk"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "195345094314-jjtr83cp92isv7blrr5pjh8nt17ucuk5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "195345094314-pb27hphdbt4o0gpr5plc16qb5dua6qdj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.firebasenotesapp"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,20 @@
           "package_name": "com.example.sirvandad"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "195345094314-uodg7s5gvjccqicebkomsugjct5bb5u2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sirvandad",
+            "certificate_hash": "b62a2fd05ec72067f29bfb29a568a674086bae6c"
+          }
+        },
+        {
+          "client_id": "195345094314-jjtr83cp92isv7blrr5pjh8nt17ucuk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAfDlDEibZqydcd-nGXz2Fv3HVxK2yfoJk"
@@ -39,7 +69,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "195345094314-jjtr83cp92isv7blrr5pjh8nt17ucuk5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "195345094314-pb27hphdbt4o0gpr5plc16qb5dua6qdj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.firebasenotesapp"
+              }
+            }
+          ]
         }
       }
     }
