@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebasenotesapp/constant/routes.dart';
 import 'package:firebasenotesapp/firebase_options.dart';
 import 'package:firebasenotesapp/widgets/messages.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('loginPage'),
+          title: const Text('Signup page'),
           centerTitle: true,
         ),
         body: Column(
@@ -96,7 +97,7 @@ class _RegisterViewState extends State<RegisterView> {
             TextButton(
                 onPressed: () {
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/login/', (context) => false);
+                      .pushNamedAndRemoveUntil(loginRoute, (route) => false);
                 },
                 child: const Text('Already Registered? go to Login'))
           ],

@@ -26,8 +26,7 @@ class _EmailVerrificationPageState extends State<EmailVerrificationPage> {
               TextButton(
                   onPressed: () async {
                     final user = FirebaseAuth.instance.currentUser;
-                    await user?.sendEmailVerification(ActionCodeSettings(
-                        url: FirebaseAuth.instance.currentUser!.email!));
+                    await user?.sendEmailVerification();
                   },
                   child: const Text('verify my Email'))
             ],

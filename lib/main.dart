@@ -1,14 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebasenotesapp/constant/routes.dart';
 import 'package:firebasenotesapp/firebase_options.dart';
+import 'package:firebasenotesapp/views/decideview.dart';
 import 'package:firebasenotesapp/views/everification.dart';
 import 'package:firebasenotesapp/views/homepage.dart';
 import 'package:firebasenotesapp/views/loginview.dart';
+import 'package:firebasenotesapp/views/notesview.dart';
 import 'package:firebasenotesapp/views/registerview.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -24,12 +27,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const ViewDeciderpage(),
       routes: {
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
         '/home/': (context) => const HomePage(),
-        '/emailverfication/': (context) => const EmailVerrificationPage()
+        emailVerificationRoute: (context) => const EmailVerrificationPage(),
+        notesViewRoute: (context) => const NotesView()
       },
     );
   }

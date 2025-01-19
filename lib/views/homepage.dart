@@ -1,10 +1,33 @@
+import 'dart:developer' as console show log;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebasenotesapp/firebase_options.dart';
+import 'package:firebasenotesapp/views/everification.dart';
+import 'package:firebasenotesapp/views/loginview.dart';
+import 'package:firebasenotesapp/views/notesview.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool isusersignedin = false;
+  void checkuser() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    user != null ? isusersignedin == true : isusersignedin = false;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkuser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +50,17 @@ class HomePage extends StatelessWidget {
                 //   return const EmailVerrificationPage();
                 // }
                 final user = FirebaseAuth.instance.currentUser;
+
                 if (user?.emailVerified ?? false) {
-                  debugPrint('email is not verified');
+                  console.log("email verified");
+
+                  return const EmailVerrificationPage();
                 } else {
-                  debugPrint('email is verified');
+                  console.log("email not verified");
+                  return const NotesView();
                 }
-                return const Text('done');
               default:
-                return const Text('loading ..');
+                return const LoginView();
             }
           },
         ));

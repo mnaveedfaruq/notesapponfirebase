@@ -1,7 +1,9 @@
+import 'dart:developer' as console show log;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebasenotesapp/constant/routes.dart';
 import 'package:firebasenotesapp/firebase_options.dart';
-import 'package:firebasenotesapp/widgets/messages.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -68,29 +70,33 @@ class _LoginViewState extends State<LoginView> {
                             final email = _email.text;
                             final password = _passowrd.text;
                             try {
-                              await FirebaseAuth.instance
+                              final userCredentials = await FirebaseAuth
+                                  .instance
                                   .signInWithEmailAndPassword(
                                       email: email, password: password)
                                   .then((value) {
-                                Message().show(context, 'Logged in');
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/notesview/', (route) => false);
                               });
+                              console.log('user credentials $userCredentials');
+                              console.log(
+                                  'current user is ${FirebaseAuth.instance.currentUser.toString()}');
                             } on FirebaseAuthException catch (E) {
-                              debugPrint(E.code);
+                              console.log(E.code.toString());
                               if (E.code == 'user-not-found') {
-                                Message().show(context, 'User-not-found');
+                                console.log('user not found');
                               } else if (E.code == 'wrong-password') {
-                                Message().show(context, 'Wrong Password');
+                                console.log('Wrong Password');
                               } else if (E.code == 'invalid-credential') {
-                                Message()
-                                    .show(context, 'credentials are invalid');
+                                console.log('credentials are invalid');
                               } else {
-                                Message().show(context, 'got error ${E.code} ');
+                                console.log('got error');
                               }
                               _email.text = '';
                               _passowrd.text = '';
                             } catch (e) {
-                              print(e.runtimeType);
-                              print(e);
+                              console.log(e.runtimeType.toString());
+                              console.log(e.toString());
                             }
                           },
                           child: const Text('Login'))
@@ -104,9 +110,9 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
               onPressed: () {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
-              child: Text('not Registered yet? Register'))
+              child: const Text('not Registered yet? Register'))
         ],
       ),
     );
