@@ -73,24 +73,37 @@ class _LoginViewState extends State<LoginView> {
                               final userCredentials = await FirebaseAuth
                                   .instance
                                   .signInWithEmailAndPassword(
-                                      email: email, password: password)
-                                  .then((value) {
+                                      email: email, password: password);
+                              final user = FirebaseAuth.instance.currentUser;
+                              if (user?.emailVerified == true) {
+                                //user email is verified
                                 Navigator.of(context).pushNamedAndRemoveUntil(
-                                    '/notesview/', (route) => false);
-                              });
+                                  notesViewRoute,
+                                  (route) => false,
+                                );
+                              } else {
+                                //user email is not verified
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  emailVerificationRoute,
+                                  (route) => false,
+                                );
+                              }
                               console.log('user credentials $userCredentials');
                               console.log(
                                   'current user is ${FirebaseAuth.instance.currentUser.toString()}');
                             } on FirebaseAuthException catch (E) {
                               console.log(E.code.toString());
                               if (E.code == 'user-not-found') {
-                                console.log('user not found');
-                              } else if (E.code == 'wrong-password') {
-                                console.log('Wrong Password');
-                              } else if (E.code == 'invalid-credential') {
-                                console.log('credentials are invalid');
+                                showErrorDialog(context, 'user not found');
+                              }
+                              if (E.code == 'wrong-password') {
+                                showErrorDialog(
+                                    context, 'wrong password provided');
+                              }
+                              if (E.code == 'invalid-credential') {
+                                showErrorDialog(context, 'invalid credentials');
                               } else {
-                                console.log('got error');
+                                showErrorDialog(context, 'got error ${E.code}');
                               }
                               _email.text = '';
                               _passowrd.text = '';
@@ -117,4 +130,52 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
+}
+
+Future<bool> showmyDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('logout'),
+        content: const Text('are you sure you want to log out'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('log out')),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('cancel'))
+        ],
+      );
+    },
+  ).then(
+    (value) => value ?? false,
+  );
+}
+
+Future<void> showErrorDialog(
+  BuildContext context,
+  String message,
+) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('An Error Occured'),
+        content: Text(message),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ok'))
+        ],
+      );
+    },
+  );
 }

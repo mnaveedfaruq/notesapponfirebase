@@ -71,3 +71,25 @@ Future<bool> showmyDialog(BuildContext context) {
     (value) => value ?? false,
   );
 }
+
+Future<void> showErrorDialog(
+  BuildContext context,
+  String message,
+) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('An Error Occured'),
+        content: Text(message),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('ok'))
+        ],
+      );
+    },
+  );
+}

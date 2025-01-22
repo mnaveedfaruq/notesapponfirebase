@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebasenotesapp/constant/routes.dart';
 import 'package:flutter/material.dart';
 
 class EmailVerrificationPage extends StatefulWidget {
@@ -19,16 +20,33 @@ class _EmailVerrificationPageState extends State<EmailVerrificationPage> {
           color: Colors.white,
           child: Column(
             children: [
-              const Text('please verfy your email here'),
+              const Text(
+                  'Email verification has been sent to your Email Address'),
               const SizedBox(
                 height: 30,
               ),
-              TextButton(
-                  onPressed: () async {
-                    final user = FirebaseAuth.instance.currentUser;
-                    await user?.sendEmailVerification();
-                  },
-                  child: const Text('verify my Email'))
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () async {
+                          final user = FirebaseAuth.instance.currentUser;
+                          await user?.sendEmailVerification();
+                        },
+                        child: const Text('resend Verification')),
+                  ),
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            loginRoute,
+                            (route) => false,
+                          );
+                        },
+                        child: const Text('Go to login')),
+                  ),
+                ],
+              )
             ],
           ),
         ));
