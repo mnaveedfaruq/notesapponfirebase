@@ -1,6 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebasenotesapp/constant/routes.dart';
-import 'package:firebasenotesapp/firebase_options.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_service.dart';
 import 'package:firebasenotesapp/views/decideview.dart';
 import 'package:firebasenotesapp/views/everification.dart';
 import 'package:firebasenotesapp/views/homepage.dart';
@@ -11,7 +10,7 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await AuthService.firebase().initialize();
   runApp(const MyApp());
 }
 

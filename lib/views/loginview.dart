@@ -1,9 +1,9 @@
 import 'dart:developer' as console show log;
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebasenotesapp/constant/routes.dart';
-import 'package:firebasenotesapp/firebase_options.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_exceptions.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_service.dart';
+import 'package:firebasenotesapp/utilities/show_error_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -40,8 +40,7 @@ class _LoginViewState extends State<LoginView> {
       body: Column(
         children: [
           FutureBuilder(
-            future: Firebase.initializeApp(
-                options: DefaultFirebaseOptions.currentPlatform),
+            future: AuthService.firebase().initialize(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -70,12 +69,11 @@ class _LoginViewState extends State<LoginView> {
                             final email = _email.text;
                             final password = _passowrd.text;
                             try {
-                              final userCredentials = await FirebaseAuth
-                                  .instance
-                                  .signInWithEmailAndPassword(
-                                      email: email, password: password);
-                              final user = FirebaseAuth.instance.currentUser;
-                              if (user?.emailVerified == true) {
+                              final userCredentials =
+                                  await AuthService.firebase()
+                                      .login(email: email, password: password);
+                              final user = AuthService.firebase().currentUser;
+                              if (user?.isEmailVerified == true) {
                                 //user email is verified
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                   notesViewRoute,
@@ -90,27 +88,26 @@ class _LoginViewState extends State<LoginView> {
                               }
                               console.log('user credentials $userCredentials');
                               console.log(
-                                  'current user is ${FirebaseAuth.instance.currentUser.toString()}');
-                            } on FirebaseAuthException catch (E) {
-                              console.log(E.code.toString());
-                              if (E.code == 'user-not-found') {
-                                showErrorDialog(context, 'user not found');
-                              }
-                              if (E.code == 'wrong-password') {
-                                showErrorDialog(
-                                    context, 'wrong password provided');
-                              }
-                              if (E.code == 'invalid-credential') {
+                                  'current user is ${AuthService.firebase().currentUser.toString()}');
+                            } on UserNotFoundAuthException {
+                              showErrorDialog(context, 'user not found');
+                            } on WrongPasswordAuthException {
+                              showErrorDialog(
+                                  context, 'wrong password provided');
+                            } on InvlalidCredentialsAuthException {
+                              if (context.mounted) {
                                 showErrorDialog(context, 'invalid credentials');
-                              } else {
-                                showErrorDialog(context, 'got error ${E.code}');
                               }
-                              _email.text = '';
-                              _passowrd.text = '';
-                            } catch (e) {
-                              console.log(e.runtimeType.toString());
-                              console.log(e.toString());
+                            } on GenericAuthException {
+                              if (context.mounted) {
+                                showErrorDialog(
+                                    context, 'authentication Error');
+                              }
+                            } on Exception catch (e) {
+                              showErrorDialog(context, '${e.runtimeType}');
                             }
+                            _email.text = '';
+                            _passowrd.text = '';
                           },
                           child: const Text('Login'))
                     ],
@@ -155,27 +152,5 @@ Future<bool> showmyDialog(BuildContext context) {
     },
   ).then(
     (value) => value ?? false,
-  );
-}
-
-Future<void> showErrorDialog(
-  BuildContext context,
-  String message,
-) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('An Error Occured'),
-        content: Text(message),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Ok'))
-        ],
-      );
-    },
   );
 }

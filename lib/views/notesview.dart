@@ -1,5 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebasenotesapp/constant/routes.dart';
+import 'package:firebasenotesapp/enums/menu_action.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_service.dart';
+import 'package:firebasenotesapp/utilities/show_error_dialog.dart';
 import 'package:flutter/material.dart';
 
 class NotesView extends StatefulWidget {
@@ -8,8 +10,6 @@ class NotesView extends StatefulWidget {
   @override
   State<NotesView> createState() => _NotesViewState();
 }
-
-enum ManuAction { logout }
 
 class _NotesViewState extends State<NotesView> {
   @override
@@ -24,9 +24,11 @@ class _NotesViewState extends State<NotesView> {
                 case ManuAction.logout:
                   final result = await showmyDialog(context);
                   if (result) {
-                    await FirebaseAuth.instance.signOut().then((result) =>
-                        Navigator.of(context)
-                            .pushNamedAndRemoveUntil(loginRoute, (_) => false));
+                    await AuthService.firebase().logout();
+                    if (context.mounted) {
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil(loginRoute, (_) => false);
+                    }
                   }
 
                   break;
@@ -44,52 +46,4 @@ class _NotesViewState extends State<NotesView> {
       ),
     );
   }
-}
-
-Future<bool> showmyDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('logout'),
-        content: const Text('are you sure you want to log out'),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text('log out')),
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text('cancel'))
-        ],
-      );
-    },
-  ).then(
-    (value) => value ?? false,
-  );
-}
-
-Future<void> showErrorDialog(
-  BuildContext context,
-  String message,
-) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('An Error Occured'),
-        content: Text(message),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('ok'))
-        ],
-      );
-    },
-  );
 }

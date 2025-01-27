@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_service.dart';
 import 'package:firebasenotesapp/views/everification.dart';
 import 'package:firebasenotesapp/views/loginview.dart';
 import 'package:firebasenotesapp/views/notesview.dart';
@@ -19,12 +19,12 @@ class _ViewDeciderpageState extends State<ViewDeciderpage> {
 }
 
 Widget getpage(BuildContext context) {
-  User? user = FirebaseAuth.instance.currentUser;
+  final user = AuthService.firebase().currentUser;
   if (user == null) {
     return const LoginView();
-  } else if (!user.emailVerified) {
+  } else if (!user.isEmailVerified) {
     return const EmailVerrificationPage();
-  } else if (user.emailVerified) {
+  } else if (user.isEmailVerified) {
     return const NotesView();
   }
   return const Center(

@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebasenotesapp/constant/routes.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class EmailVerrificationPage extends StatefulWidget {
@@ -30,8 +30,7 @@ class _EmailVerrificationPageState extends State<EmailVerrificationPage> {
                   Expanded(
                     child: TextButton(
                         onPressed: () async {
-                          final user = FirebaseAuth.instance.currentUser;
-                          await user?.sendEmailVerification();
+                          await AuthService.firebase().sendEmailVerification();
                         },
                         child: const Text('resend Verification')),
                   ),

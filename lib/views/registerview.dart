@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebasenotesapp/constant/routes.dart';
-import 'package:firebasenotesapp/firebase_options.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_exceptions.dart';
+import 'package:firebasenotesapp/sevices/auth/auth_service.dart';
 import 'package:firebasenotesapp/widgets/messages.dart';
 import 'package:flutter/material.dart';
 
@@ -38,8 +37,7 @@ class _RegisterViewState extends State<RegisterView> {
         body: Column(
           children: [
             FutureBuilder(
-              future: Firebase.initializeApp(
-                  options: DefaultFirebaseOptions.currentPlatform),
+              future: AuthService.firebase().initialize(),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
@@ -68,29 +66,32 @@ class _RegisterViewState extends State<RegisterView> {
                               final email = _email.text;
                               final password = _passowrd.text;
                               try {
-                                await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
+                                await AuthService.firebase()
+                                    .createUser(
                                         email: email, password: password)
                                     .then((value) async {
-                                  await FirebaseAuth.instance.currentUser!
+                                  await AuthService.firebase()
                                       .sendEmailVerification();
-                                  Navigator.of(context)
-                                      .pushNamed(emailVerificationRoute);
+                                  if (context.mounted) {
+                                    Navigator.of(context)
+                                        .pushNamed(emailVerificationRoute);
+                                  }
                                 });
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'weak-password') {
-                                  Message().show(context, 'password is weak');
-                                  _passowrd.text = '';
+                              } on WeakPasswordAuthException {
+                                if (context.mounted) {
+                                  Message().show(context, 'weak password');
                                 }
-                                if (e.code == 'invalid-email') {
+                                _passowrd.text = '';
+                              } on InvalidEmailAuthException {
+                                if (context.mounted) {
                                   Message().show(context, 'invalid email');
-                                  _email.text = '';
                                 }
-                                Message()
-                                    .show(context, 'auth exception ${e.code}');
-                              } catch (e) {
-                                // ignore: use_build_context_synchronously
-                                Message().show(context, e.toString());
+                                _email.text = '';
+                              } on GenericAuthException {
+                                if (context.mounted) {
+                                  Message()
+                                      .show(context, 'authentication error}');
+                                }
                               }
                             },
                             child: const Text('Register'))
