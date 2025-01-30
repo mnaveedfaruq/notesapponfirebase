@@ -75,25 +75,33 @@ class _LoginViewState extends State<LoginView> {
                               final user = AuthService.firebase().currentUser;
                               if (user?.isEmailVerified == true) {
                                 //user email is verified
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                  notesViewRoute,
-                                  (route) => false,
-                                );
+                                if (context.mounted) {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    notesViewRoute,
+                                    (route) => false,
+                                  );
+                                }
                               } else {
                                 //user email is not verified
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                  emailVerificationRoute,
-                                  (route) => false,
-                                );
+                                if (context.mounted) {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    emailVerificationRoute,
+                                    (route) => false,
+                                  );
+                                }
                               }
                               console.log('user credentials $userCredentials');
                               console.log(
                                   'current user is ${AuthService.firebase().currentUser.toString()}');
                             } on UserNotFoundAuthException {
-                              showErrorDialog(context, 'user not found');
+                              if (context.mounted) {
+                                showErrorDialog(context, 'user not found');
+                              }
                             } on WrongPasswordAuthException {
-                              showErrorDialog(
-                                  context, 'wrong password provided');
+                              if (context.mounted) {
+                                showErrorDialog(
+                                    context, 'wrong password provided');
+                              }
                             } on InvlalidCredentialsAuthException {
                               if (context.mounted) {
                                 showErrorDialog(context, 'invalid credentials');
@@ -104,7 +112,9 @@ class _LoginViewState extends State<LoginView> {
                                     context, 'authentication Error');
                               }
                             } on Exception catch (e) {
-                              showErrorDialog(context, '${e.runtimeType}');
+                              if (context.mounted) {
+                                showErrorDialog(context, '${e.runtimeType}');
+                              }
                             }
                             _email.text = '';
                             _passowrd.text = '';
