@@ -32,7 +32,7 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Notes view',
+          'Your Notes',
           style: TextStyle(
             color: Colors.cyan,
             fontStyle: FontStyle.italic,
@@ -40,6 +40,11 @@ class _NotesViewState extends State<NotesView> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(newNotesView);
+              },
+              icon: const Icon(Icons.add)),
           PopupMenuButton(
             onSelected: (value) async {
               switch (value) {

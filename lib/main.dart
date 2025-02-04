@@ -4,6 +4,7 @@ import 'package:firebasenotesapp/views/decideview.dart';
 import 'package:firebasenotesapp/views/everification.dart';
 import 'package:firebasenotesapp/views/homepage.dart';
 import 'package:firebasenotesapp/views/loginview.dart';
+import 'package:firebasenotesapp/views/notes/new_noteView.dart';
 import 'package:firebasenotesapp/views/notesview.dart';
 import 'package:firebasenotesapp/views/registerview.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
         registerRoute: (context) => const RegisterView(),
         '/home/': (context) => const HomePage(),
         emailVerificationRoute: (context) => const EmailVerrificationPage(),
-        notesViewRoute: (context) => const NotesView()
+        notesViewRoute: (context) => const NotesView(),
+        newNotesView: (context) => const NewNotesView()
       },
     );
   }
