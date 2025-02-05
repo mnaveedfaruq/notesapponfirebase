@@ -26,11 +26,15 @@ class NoteServices {
 
   //creating singleton of NoteServices
   static final NoteServices _shared = NoteServices._shredInstance();
-  NoteServices._shredInstance();
-  factory NoteServices() => _shared;
   //creating a stream controller to handle the data
-  final _notesStreamController =
-      StreamController<List<DataBaseNotes>>.broadcast();
+  late final StreamController<List<DataBaseNotes>> _notesStreamController;
+  NoteServices._shredInstance() {
+    _notesStreamController =
+        StreamController<List<DataBaseNotes>>.broadcast(onListen: () {
+      _notesStreamController.sink.add(_notes);
+    });
+  }
+  factory NoteServices() => _shared;
 
   Stream<List<DataBaseNotes>> get allnotes => _notesStreamController.stream;
 
@@ -52,6 +56,8 @@ class NoteServices {
     //start to update
     final updatedRowsCount = await db.update(
       noteTable,
+      where: '$idColumn=?',
+      whereArgs: [note.id],
       {
         textColumn: text,
         isSyncedColumn: 0,
@@ -62,6 +68,7 @@ class NoteServices {
     }
     final updatedNote = await getSingleNote(id: note.id);
     _notes.removeWhere((nte) => nte.id == updatedNote.id);
+    _notes.add(updatedNote);
     _notesStreamController.add(_notes);
     return updatedNote;
   }
@@ -78,6 +85,7 @@ class NoteServices {
     final result = allNotes.map(
       (singleRow) => DataBaseNotes.fromRow(singleRow),
     );
+    debugPrint(result.toString());
     return result;
   }
 
