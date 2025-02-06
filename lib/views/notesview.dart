@@ -2,7 +2,8 @@ import 'package:firebasenotesapp/constant/routes.dart';
 import 'package:firebasenotesapp/enums/menu_action.dart';
 import 'package:firebasenotesapp/sevices/auth/auth_service.dart';
 import 'package:firebasenotesapp/sevices/sqf/note_services.dart';
-import 'package:firebasenotesapp/utilities/show_error_dialog.dart';
+import 'package:firebasenotesapp/utilities/dialog/logoutDialog.dart';
+import 'package:firebasenotesapp/views/notes_listview.dart';
 import 'package:flutter/material.dart';
 
 class NotesView extends StatefulWidget {
@@ -43,7 +44,7 @@ class _NotesViewState extends State<NotesView> {
             onSelected: (value) async {
               switch (value) {
                 case ManuAction.logout:
-                  final result = await showmyDialog(context);
+                  final result = await showLogoutDialog(context);
                   if (result) {
                     await AuthService.firebase().logout();
                     if (context.mounted) {
@@ -87,22 +88,14 @@ class _NotesViewState extends State<NotesView> {
                     case ConnectionState.active:
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DataBaseNotes>;
-                        return ListView.builder(
-                          itemCount: allNotes.length,
-                          itemBuilder: (context, index) {
-                            final note = allNotes[index];
-                            return ListTile(
-                              title: Text(
-                                note.text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
+                        return NoteListView(
+                          notes: allNotes,
+                          onDeleteNote: (note) async {
+                            await _noteServices.deleteNote(id: note.id);
                           },
                         );
                       } else {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       }
                     case ConnectionState.done:
                       return const Text('done state of stream builder');
