@@ -4,7 +4,7 @@ import 'package:firebasenotesapp/views/decideview.dart';
 import 'package:firebasenotesapp/views/everification.dart';
 import 'package:firebasenotesapp/views/homepage.dart';
 import 'package:firebasenotesapp/views/loginview.dart';
-import 'package:firebasenotesapp/views/notes/new_noteView.dart';
+import 'package:firebasenotesapp/views/notes/create_update_note_view.dart';
 import 'package:firebasenotesapp/views/notesview.dart';
 import 'package:firebasenotesapp/views/registerview.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         '/home/': (context) => const HomePage(),
         emailVerificationRoute: (context) => const EmailVerrificationPage(),
         notesViewRoute: (context) => const NotesView(),
-        newNotesView: (context) => const NewNotesView()
+        createUpdateNotesViewRoute: (context) => const CreateUpdateNotesView()
       },
     );
   }
