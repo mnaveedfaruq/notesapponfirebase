@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebasenotesapp/extensions/list/fiter.dart';
 import 'package:firebasenotesapp/sevices/sqf/crud_exception.dart';
 import 'package:firebasenotesapp/sevices/sqf/sqf_constants.dart';
 import 'package:flutter/foundation.dart';
@@ -10,12 +11,19 @@ import 'package:sqflite/sqflite.dart';
 class NoteServices {
   Database? _db;
 
-  Future<DataBaseUser> getOrCreateUser({required String email}) async {
+  Future<DataBaseUser> getOrCreateUser(
+      {required String email, bool setAsCurrentUser = true}) async {
     try {
-      final user = await getuser(email: email);
+      final user = await getUser(email: email);
+      if (setAsCurrentUser) {
+        _user = user;
+      }
       return user;
     } on CouldNotFindUser {
       final createdUser = await createUser(email: email);
+      if (setAsCurrentUser) {
+        _user = createdUser;
+      }
       return createdUser;
     } catch (e) {
       rethrow;
@@ -23,12 +31,13 @@ class NoteServices {
   }
 
   List<DataBaseNotes> _notes = [];
+  DataBaseUser? _user;
 
   //creating singleton of NoteServices
-  static final NoteServices _shared = NoteServices._shredInstance();
+  static final NoteServices _shared = NoteServices._sharedInstance();
   //creating a stream controller to handle the data
   late final StreamController<List<DataBaseNotes>> _notesStreamController;
-  NoteServices._shredInstance() {
+  NoteServices._sharedInstance() {
     _notesStreamController =
         StreamController<List<DataBaseNotes>>.broadcast(onListen: () {
       _notesStreamController.sink.add(_notes);
@@ -36,7 +45,15 @@ class NoteServices {
   }
   factory NoteServices() => _shared;
 
-  Stream<List<DataBaseNotes>> get allnotes => _notesStreamController.stream;
+  Stream<List<DataBaseNotes>> get allnotes =>
+      _notesStreamController.stream.filter((note) {
+        final currentUser = _user;
+        if (currentUser != null) {
+          return note.userId == currentUser.id;
+        } else {
+          throw UserShouldBeSetBeforeReadingAllNotes();
+        }
+      });
 
   Future<void> _catchAllNotes() async {
     final allNotes = await getAllNotes();
@@ -143,7 +160,7 @@ class NoteServices {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     //making sure owner exists in the database
-    final dbUser = await getuser(email: owner.email);
+    final dbUser = await getUser(email: owner.email);
     //comparing id of given owner with id of the dbuser
     if (dbUser != owner) {
       throw CouldNotFindUser();
@@ -167,7 +184,7 @@ class NoteServices {
     return note;
   }
 
-  Future<DataBaseUser> getuser({required String email}) async {
+  Future<DataBaseUser> getUser({required String email}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final results = await db.query(userTable,

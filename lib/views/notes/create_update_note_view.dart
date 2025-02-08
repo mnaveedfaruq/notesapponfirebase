@@ -29,7 +29,7 @@ class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
     }
     final currentUser = AuthService.firebase().currentUser!;
     final email = currentUser.email!;
-    final owner = await _noteService.getuser(email: email);
+    final owner = await _noteService.getUser(email: email);
     final newNote = await _noteService.createNote(owner: owner);
     _note = newNote;
     return newNote;
