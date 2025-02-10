@@ -37,6 +37,7 @@ class NoteServices {
   static final NoteServices _shared = NoteServices._sharedInstance();
   //creating a stream controller to handle the data
   late final StreamController<List<DataBaseNotes>> _notesStreamController;
+
   NoteServices._sharedInstance() {
     _notesStreamController =
         StreamController<List<DataBaseNotes>>.broadcast(onListen: () {
